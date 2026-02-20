@@ -1,4 +1,4 @@
-# 👁 Face Recognition & Emotion Detection System
+# Face Recognition & Emotion Detection System
 
 A real-time computer vision system built with Python that detects faces, recognizes people by name, and analyzes emotions, age, and gender live from a webcam.
 
