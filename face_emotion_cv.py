@@ -6,10 +6,10 @@
 ╚══════════════════════════════════════════════════════════════╝
 
 NEW FEATURES:
-  ✅ Email alert when unknown face detected
-  ✅ Saves snapshot of unknown face and attaches to email
-  ✅ Cooldown so you don't get spammed with emails
-  ✅ Writes live data to JSON file for Flask dashboard
+  Email alert when unknown face detected
+  Saves snapshot of unknown face and attaches to email
+  Cooldown so you don't get spammed with emails
+  Writes live data to JSON file for Flask dashboard
 
 SETUP:
   1. Fill in your email details in the CONFIG section below
@@ -49,7 +49,7 @@ def check_deps():
         except ImportError:
             missing.append(pkg)
     if missing:
-        print(f"❌ Missing: pip install {' '.join(missing)}")
+        print(f"Missing: pip install {' '.join(missing)}")
         sys.exit(1)
 
 check_deps()
@@ -119,7 +119,7 @@ class EmailAlerter:
     def _send(self, img_path: str, timestamp: str):
         try:
             msg = MIMEMultipart()
-            msg["Subject"] = f"⚠️ Unknown Face Detected — {timestamp}"
+            msg["Subject"] = f"Unknown Face Detected — {timestamp}"
             msg["From"]    = EMAIL_SENDER
             msg["To"]      = EMAIL_RECEIVER
 
@@ -146,7 +146,7 @@ A snapshot has been attached to this email.
 
             print(f"  📧 Alert email sent to {EMAIL_RECEIVER}")
         except Exception as e:
-            print(f"  ⚠️  Email failed: {e}")
+            print(f"  Email failed: {e}")
 
 
 # ── Live Data Writer (for Flask dashboard) ────────────────────────────────────
@@ -212,20 +212,20 @@ class FaceDatabase:
             if encs:
                 self.encodings.append(encs[0])
                 self.names.append(img_path.stem.split("_")[0])
-        print(f"  👤 Loaded {len(self.names)} known face(s): {self.names}")
+        print(f" Loaded {len(self.names)} known face(s): {self.names}")
 
     def register(self, frame: np.ndarray, name: str) -> bool:
         rgb  = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         encs = face_recognition.face_encodings(rgb)
         if not encs:
-            print("  ❌ No face detected.")
+            print(" No face detected.")
             return False
         ts   = datetime.now().strftime("%Y%m%d_%H%M%S")
         path = KNOWN_FACES_DIR / f"{name}_{ts}.jpg"
         cv2.imwrite(str(path), frame)
         self.encodings.append(encs[0])
         self.names.append(name)
-        print(f"  ✅ Registered '{name}'")
+        print(f" Registered '{name}'")
         return True
 
     def identify(self, encoding) -> tuple[str, float]:
@@ -256,7 +256,7 @@ class AttendanceLogger:
         with open(ATTENDANCE_FILE, "a", newline="") as f:
             csv.writer(f).writerow([name, now.strftime("%Y-%m-%d"),
                                     now.strftime("%H:%M:%S"), emotion, age, gender])
-        print(f"  📋 Logged: {name}")
+        print(f" Logged: {name}")
 
 
 # ── HUD Helpers ───────────────────────────────────────────────────────────────
@@ -310,9 +310,9 @@ class FaceEmotionApp:
         self.analysis_cache: dict = {}
         self.prev_locations: list = []
 
-        status = "ENABLED ✅" if EMAIL_ENABLED else "DISABLED (set EMAIL_ENABLED=True in config)"
-        print(f"  📧 Email alerts: {status}")
-        print(f"  📊 Dashboard data: {LIVE_DATA_FILE}")
+        status = "ENABLED" if EMAIL_ENABLED else "DISABLED (set EMAIL_ENABLED=True in config)"
+        print(f" Email alerts: {status}")
+        print(f" Dashboard data: {LIVE_DATA_FILE}")
 
     def _face_id(self, loc) -> int:
         top, right, bottom, left = loc
@@ -325,11 +325,11 @@ class FaceEmotionApp:
     def run(self):
         cap = cv2.VideoCapture(0)
         if not cap.isOpened():
-            print("  ❌ Cannot open webcam.")
+            print(" Cannot open webcam.")
             return
         cap.set(cv2.CAP_PROP_FRAME_WIDTH,  1280)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-        print("  ✅ Camera ready!")
+        print(" Camera ready!")
         print("  [R] Register  [S] Screenshot  [A] Attendance  [E] Emotion  [G] Age/Gender  [Q] Quit\n")
 
         while True:
@@ -453,7 +453,7 @@ class FaceEmotionApp:
             if key == ord("q"):
                 break
             elif key == ord("r"):
-                print("\n  📸 REGISTER NEW FACE")
+                print("\n REGISTER NEW FACE")
                 name_in = input("  Enter name: ").strip()
                 if name_in:
                     ret2, snap = cap.read()
@@ -463,10 +463,10 @@ class FaceEmotionApp:
                 ts   = datetime.now().strftime("%Y%m%d_%H%M%S")
                 path = SCREENSHOTS_DIR / f"capture_{ts}.jpg"
                 cv2.imwrite(str(path), frame)
-                print(f"  📷 Screenshot: {path}")
+                print(f" Screenshot: {path}")
             elif key == ord("a"):
                 self.logging_active = not self.logging_active
-                print(f"  📋 Attendance: {'ON' if self.logging_active else 'OFF'}")
+                print(f" Attendance: {'ON' if self.logging_active else 'OFF'}")
             elif key == ord("e"):
                 self.show_emotion = not self.show_emotion
             elif key == ord("g"):
@@ -474,7 +474,7 @@ class FaceEmotionApp:
 
         cap.release()
         cv2.destroyAllWindows()
-        print("\n  👋 Session ended.")
+        print("\n Session ended.")
 
 
 if __name__ == "__main__":
