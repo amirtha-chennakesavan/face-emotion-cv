@@ -3,12 +3,12 @@
 A real-time computer vision system built with Python that detects faces, recognizes people by name, and analyzes emotions, age, and gender live from a webcam.
 
 ## Features
-- 😊 Real-time emotion detection (7 emotions)
-- 👤 Face registration and recognition
-- 🎂 Age and gender estimation
-- 📋 Attendance logging to CSV
-- 📧 Email alerts for unknown faces
-- 📊 Live web dashboard (Flask)
+- Real-time emotion detection (7 emotions)
+- Face registration and recognition
+- Age and gender estimation
+- Attendance logging to CSV
+- Email alerts for unknown faces
+- Live web dashboard (Flask)
 
 ## Tech Stack
 Python, OpenCV, DeepFace, face_recognition, dlib, Flask
